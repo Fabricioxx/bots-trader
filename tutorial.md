@@ -81,7 +81,19 @@ python backtest_grafico.py
 
 ---
 
-## 7. Estrutura dos Arquivos
+## 7. Backtest Interativo com Painel
+
+Para rodar o painel interativo do backtest:
+
+```powershell
+streamlit run backtest_streamlit.py
+```
+
+- Veja o desempenho do capital, sinais e métricas do backtest em tempo real
+
+---
+
+## 8. Estrutura dos Arquivos
 
 - `bot.py`: Bot principal com controle de posição, stop loss, take profit e logs
 - `estrategia.py`: Lógica da estratégia 80/20 (médias móveis, RSI, volume)
@@ -90,11 +102,12 @@ python backtest_grafico.py
 - `logs/`: Logs detalhados das operações
 - `app.py`: Painel web interativo com Streamlit
 - `backtest_grafico.py`: Backtest com gráfico de capital
+- `backtest_streamlit.py`: Painel interativo do backtest
 - `requirements.txt`: Dependências do projeto
 
 ---
 
-## 8. Dicas de Segurança
+## 9. Dicas de Segurança
 
 - Nunca compartilhe seu `config.py` publicamente
 - Use sempre a Testnet para testes
@@ -102,7 +115,7 @@ python backtest_grafico.py
 
 ---
 
-## 9. Personalizações e Expansões
+## 10. Personalizações e Expansões
 
 - Para múltiplos ativos, duplique o bloco de execução do bot para cada símbolo desejado
 - Ajuste os parâmetros de stop loss/take profit em `bot.py`
@@ -111,6 +124,6 @@ python backtest_grafico.py
 
 ---
 
-## 10. Suporte
+## 11. Suporte
 
 Abra issues ou contribua no repositório do projeto para dúvidas e melhorias!
