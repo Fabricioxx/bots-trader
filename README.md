@@ -1,17 +1,17 @@
 # Trading Bot
 
-Este projeto é um bot de trading em Python para a Binance, focado em operar apenas nos 20% dos momentos de maior probabilidade de sucesso, segundo o Princípio de Pareto (80/20). Ele utiliza confluência de médias móveis, força da tendência (RSI) e volume acima da média para tomar decisões. O bot executa ordens reais na Testnet da Binance, possui estrutura modular e registra logs das operações.
+Este projeto é um bot de trading em Python para a Binance, focado em operar apenas nos 20% dos momentos de maior probabilidade de sucesso, segundo o Princípio de Pareto (80/20). Ele utiliza confluência de médias móveis, força da tendência (RSI) e volume acima da média para tomar decisões. O bot executa ordens reais na Testnet da Binance, possui estrutura modular, registra logs das operações e agora conta com backtest gráfico.
 
 ## Como começar
 
 1. Certifique-se de ter o Python instalado.
 2. Instale as dependências necessárias:
-   ```bash
+   ```powershell
    pip install -r requirements.txt
    ```
 3. Configure sua API Key e Secret da Binance Testnet no arquivo `config.py`.
 4. Execute o bot com:
-   ```bash
+   ```powershell
    python bot.py
    ```
 
@@ -23,6 +23,8 @@ Este projeto é um bot de trading em Python para a Binance, focado em operar ape
 - `config.py`: Configurações gerais (API Key, Secret, símbolo, quantidade, URL da Testnet).
 - `logs/`: Pasta onde são salvos os logs das operações realizadas.
 - `requirements.txt`: Lista de dependências do projeto.
+- `backtest.py`: Script para simular a estratégia com dados históricos e mostrar o resultado final.
+- `backtest_grafico.py`: Script para simular a estratégia e exibir um gráfico da evolução do capital ao longo do tempo.
 
 ## Estratégia 80/20 implementada
 
@@ -41,27 +43,36 @@ O robô só opera quando há forte confluência de sinais, buscando os 20% dos m
 ### Mantém posição
 - Se nenhuma das condições acima for atendida, o bot não executa ordens.
 
-## Como funciona o código
+## Controle de posição inteligente
 
-- O `bot.py` executa um loop a cada 1 minuto:
-  1. Busca os últimos candles do ativo na Binance Testnet.
-  2. Chama a função `analisar_mercado` da `estrategia.py` para decidir se deve comprar, vender ou manter.
-  3. Se a decisão for comprar ou vender, executa a ordem via API e registra no log.
-  4. Todos os resultados e erros são salvos em arquivos de log na pasta `logs/`.
+O bot mantém o estado da posição atual (`comprado`, `vendido` ou `neutro`) e só executa uma nova ordem se houver mudança real de direção, evitando ordens repetidas.
 
-- O `estrategia.py` utiliza a biblioteca `ta` para calcular médias móveis, RSI e volume médio, e aplica as regras da estratégia.
-- O `binance_client.py` faz a conexão segura com a API da Binance Testnet.
-- O `config.py` centraliza todas as configurações sensíveis e parâmetros do robô.
+## Backtest e análise gráfica
+
+- `backtest.py`: Simula a estratégia com dados históricos do BTC/USD (últimos 60 dias, candles de 1h) e mostra o capital final.
+- `backtest_grafico.py`: Além da simulação, exibe um gráfico da evolução do capital ao longo do tempo usando Matplotlib.
+
+### Como rodar o backtest gráfico
+
+1. Instale as dependências:
+   ```powershell
+   pip install -r requirements.txt
+   ```
+2. Execute:
+   ```powershell
+   python backtest_grafico.py
+   ```
+
+O script irá baixar os dados históricos, aplicar a estratégia e mostrar um gráfico do desempenho do capital.
 
 ## Segurança
 - O bot opera apenas na Testnet da Binance por padrão, evitando riscos financeiros reais.
 - As credenciais ficam no arquivo `config.py` (NUNCA compartilhe este arquivo publicamente).
 
 ## Próximos passos sugeridos
-- Adicionar controle de posição (não abrir 2 compras seguidas)
-- Implementar stop loss e take profit automáticos
-- Criar dashboards e relatórios
-- Fazer backtests com dados históricos
+- Adicionar stop loss e take profit automáticos
+- Criar dashboards e relatórios interativos
+- Fazer backtests com outros ativos e períodos
 - Subir para um VPS para rodar 24/7
 
 ## Observações
