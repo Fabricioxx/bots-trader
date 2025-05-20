@@ -1,0 +1,7 @@
+# Evita arquivos sensíveis e desnecessários no git
+__pycache__/
+*.pyc
+*.log
+logs/
+config.py
+.env

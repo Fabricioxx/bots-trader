@@ -4,6 +4,7 @@ import ta
 import matplotlib.pyplot as plt
 import logging
 import streamlit as st
+from estrategia import aplicar_estrategia
 
 # CONFIG LOG
 dados_log = 'backtest_streamlit.log'
@@ -23,21 +24,6 @@ def carregar_dados():
     df = df.rename(columns={"Close": "close", "Volume": "volume"})
     return df
 
-def aplicar_estrategia(df):
-    df['ma9'] = ta.trend.sma_indicator(df['close'], window=9)
-    df['ma21'] = ta.trend.sma_indicator(df['close'], window=21)
-    df['rsi'] = ta.momentum.rsi(df['close'], window=14)
-    df['volume_ma'] = df['volume'].rolling(window=20).mean()
-    df['sinal'] = 'manter'
-
-    for i in range(1, len(df)):
-        if df['ma9'].iloc[i-1] < df['ma21'].iloc[i-1] and df['ma9'].iloc[i] > df['ma21'].iloc[i]:
-            if 50 < df['rsi'].iloc[i] < 65 and df['volume'].iloc[i] > df['volume_ma'].iloc[i]:
-                df.at[df.index[i], 'sinal'] = 'compra'
-        elif df['ma9'].iloc[i-1] > df['ma21'].iloc[i-1] and df['ma9'].iloc[i] < df['ma21'].iloc[i]:
-            if 35 < df['rsi'].iloc[i] < 50 and df['volume'].iloc[i] > df['volume_ma'].iloc[i]:
-                df.at[df.index[i], 'sinal'] = 'venda'
-    return df
 
 def simular(df):
     capital = CAPITAL_INICIAL

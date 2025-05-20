@@ -12,7 +12,7 @@ df = df[['Close', 'Volume']]
 st.line_chart(df['Close'], use_container_width=True)
 
 # Exibe sinais e posição atual a partir dos logs
-log_path = os.path.join('logs', 'BTCUSDT_trades.log')
+log_path = os.path.join('logs', f'{"BTCUSDT"}_trades.log')
 if os.path.exists(log_path):
     with open(log_path) as f:
         logs = f.readlines()
