@@ -1,0 +1,5 @@
+API_KEY = "SUA_API_KEY"
+API_SECRET = "SEU_API_SECRET"
+BASE_URL = "https://testnet.binance.vision"
+SYMBOL = "BTCUSDT"
+QUANTIDADE = 0.001
