@@ -19,9 +19,11 @@ CAPITAL_INICIAL = 10000
 # FUNÇÕES
 
 def carregar_dados():
-    df = yf.download("BTC-USD", interval="1h", period="30d")
+    df = yf.download("BTC-USD", interval="1h", period="30d", auto_adjust=False)
     df = df[['Close', 'Volume']]
     df = df.rename(columns={"Close": "close", "Volume": "volume"})
+    df['close'] = pd.to_numeric(df['close'], errors='coerce')
+    df['volume'] = pd.to_numeric(df['volume'], errors='coerce')
     return df
 
 
@@ -33,8 +35,8 @@ def simular(df):
     historico = []
 
     for i in range(len(df)):
-        preco = df['close'].iloc[i]
-        sinal = df['sinal'].iloc[i]
+        preco = df['close'].iat[i]
+        sinal = df['sinal'].iat[i]
         data = df.index[i]
 
         if posicao == "comprado":
