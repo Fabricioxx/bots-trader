@@ -1,80 +1,100 @@
-# Trading Bot
+# Trading Bot 80/20 - Projeto Completo
 
-Este projeto é um bot de trading em Python para a Binance, focado em operar apenas nos 20% dos momentos de maior probabilidade de sucesso, segundo o Princípio de Pareto (80/20). Ele utiliza confluência de médias móveis, força da tendência (RSI) e volume acima da média para tomar decisões. O bot executa ordens reais na Testnet da Binance, possui estrutura modular, registra logs das operações e agora conta com backtest gráfico.
+Este projeto é um robô de trading em Python para a Binance, com foco em operar apenas nos 20% dos momentos de maior probabilidade de sucesso (Princípio de Pareto 80/20). O bot utiliza confluência de médias móveis, RSI e volume, executa ordens reais na Testnet, possui controle de posição, stop loss, take profit, logs detalhados, painel web e scripts de backtest.
 
 ## Como começar
 
-1. Certifique-se de ter o Python instalado.
-2. Instale as dependências necessárias:
+1. **Pré-requisitos:**
+   - Python 3.8+
+   - Conta na Binance Testnet ([crie aqui](https://testnet.binance.vision/))
+   - Chave de API e Secret da Testnet
+
+2. **Instalação:**
    ```powershell
    pip install -r requirements.txt
    ```
-3. Configure sua API Key e Secret da Binance Testnet no arquivo `config.py`.
-4. Execute o bot com:
+
+3. **Configuração:**
+   Edite o arquivo `config.py` e coloque sua API Key e Secret da Binance Testnet:
+   ```python
+   API_KEY = "SUA_API_KEY"
+   API_SECRET = "SEU_API_SECRET"
+   BASE_URL = "https://testnet.binance.vision"
+   SYMBOL = "BTCUSDT"  # Ou outro par suportado
+   QUANTIDADE = 0.001   # Ajuste conforme seu saldo
+   ```
+
+4. **Rodando o Bot:**
    ```powershell
    python bot.py
    ```
+   O bot irá:
+   - Buscar dados de mercado a cada minuto
+   - Tomar decisões baseadas na estratégia 80/20
+   - Executar ordens reais na Testnet
+   - Aplicar stop loss e take profit automáticos
+   - Registrar todas as operações e decisões em logs
+   - Persistir o estado da posição para evitar erros em reinícios
 
-## Estrutura de arquivos
+5. **Monitorando via Painel Web:**
+   ```powershell
+   streamlit run app.py
+   ```
+   - Visualize o preço em tempo real
+   - Veja as últimas operações do bot
+   - Acompanhe sinais e posição atual
 
-- `bot.py`: Código principal, responsável pelo loop de execução, coleta de dados, decisão e execução de ordens.
-- `estrategia.py`: Implementa a lógica da estratégia 80/20 (cruzamento de médias, RSI, volume).
-- `binance_client.py`: Interface de conexão com a API da Binance.
-- `config.py`: Configurações gerais (API Key, Secret, símbolo, quantidade, URL da Testnet).
-- `logs/`: Pasta onde são salvos os logs das operações realizadas.
-- `requirements.txt`: Lista de dependências do projeto.
-- `backtest.py`: Script para simular a estratégia com dados históricos e mostrar o resultado final.
-- `backtest_grafico.py`: Script para simular a estratégia e exibir um gráfico da evolução do capital ao longo do tempo.
+6. **Backtest da Estratégia:**
+   - Simulação simples:
+     ```powershell
+     python backtest.py
+     ```
+   - Com gráfico:
+     ```powershell
+     python backtest_grafico.py
+     ```
+   - Painel interativo:
+     ```powershell
+     streamlit run backtest_streamlit.py
+     ```
+
+## Estrutura dos Arquivos
+
+- `bot.py`: Bot principal com controle de posição, stop loss, take profit, logs e persistência de estado
+- `estrategia.py`: Lógica centralizada da estratégia 80/20 (médias móveis, RSI, volume)
+- `binance_client.py`: Interface com a API da Binance
+- `config.py`: Configurações gerais (API, símbolo, quantidade)
+- `logs/`: Logs detalhados das operações e estado
+- `app.py`: Painel web interativo com Streamlit para monitorar o bot
+- `backtest.py`: Backtest simples da estratégia
+- `backtest_grafico.py`: Backtest com gráfico da evolução do capital
+- `backtest_streamlit.py`: Painel interativo do backtest
+- `requirements.txt`: Dependências do projeto
+- `.gitignore`: Protege arquivos sensíveis e desnecessários
 
 ## Estratégia 80/20 implementada
 
-O robô só opera quando há forte confluência de sinais, buscando os 20% dos momentos mais favoráveis:
-
-### Compra
-- Média móvel curta (MA9) cruza para cima a longa (MA21)
-- RSI entre 50 e 65 (momentum positivo, sem sobrecompra)
-- Volume atual acima da média dos últimos 20 candles
-
-### Venda
-- Média móvel curta (MA9) cruza para baixo a longa (MA21)
-- RSI entre 35 e 50 (momentum negativo, sem sobrevenda)
-- Volume atual acima da média dos últimos 20 candles
-
-### Mantém posição
-- Se nenhuma das condições acima for atendida, o bot não executa ordens.
-
-## Controle de posição inteligente
-
-O bot mantém o estado da posição atual (`comprado`, `vendido` ou `neutro`) e só executa uma nova ordem se houver mudança real de direção, evitando ordens repetidas.
-
-## Backtest e análise gráfica
-
-- `backtest.py`: Simula a estratégia com dados históricos do BTC/USD (últimos 60 dias, candles de 1h) e mostra o capital final.
-- `backtest_grafico.py`: Além da simulação, exibe um gráfico da evolução do capital ao longo do tempo usando Matplotlib.
-
-### Como rodar o backtest gráfico
-
-1. Instale as dependências:
-   ```powershell
-   pip install -r requirements.txt
-   ```
-2. Execute:
-   ```powershell
-   python backtest_grafico.py
-   ```
-
-O script irá baixar os dados históricos, aplicar a estratégia e mostrar um gráfico do desempenho do capital.
+- **Compra:**
+  - MA9 cruza para cima a MA21
+  - RSI entre 50 e 65
+  - Volume acima da média dos últimos 20 candles
+- **Venda:**
+  - MA9 cruza para baixo a MA21
+  - RSI entre 35 e 50
+  - Volume acima da média dos últimos 20 candles
+- **Mantém posição:**
+  - Se nenhuma das condições acima for atendida
 
 ## Segurança
-- O bot opera apenas na Testnet da Binance por padrão, evitando riscos financeiros reais.
-- As credenciais ficam no arquivo `config.py` (NUNCA compartilhe este arquivo publicamente).
+- O bot opera apenas na Testnet da Binance por padrão
+- As credenciais ficam no arquivo `config.py` (NUNCA compartilhe este arquivo publicamente)
+- `.gitignore` já protege arquivos sensíveis
 
-## Próximos passos sugeridos
-- Adicionar stop loss e take profit automáticos
-- Criar dashboards e relatórios interativos
-- Fazer backtests com outros ativos e períodos
-- Subir para um VPS para rodar 24/7
+## Personalizações e Expansões
+- Para múltiplos ativos, duplique o bloco de execução do bot para cada símbolo desejado
+- Ajuste os parâmetros de stop loss/take profit em `bot.py`
+- Implemente novas estratégias em `estrategia.py`
+- Expanda o painel web para mostrar mais métricas
 
-## Observações
-- Este projeto está em desenvolvimento inicial.
-- Sinta-se à vontade para sugerir melhorias ou abrir issues.
+## Suporte
+Abra issues ou contribua no repositório do projeto para dúvidas e melhorias!
