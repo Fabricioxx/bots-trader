@@ -15,10 +15,13 @@ logging.basicConfig(filename=os.path.join(LOG_DIR, f'{SYMBOL}_trading_bot.log'),
                     level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(message)s')
 
-posicao_atual = "neutro"  # ou "comprado" / "vendido"
-preco_entrada = 0
+# Parâmetros de risco
 STOP_LOSS_PCT = 0.02  # 2%
 TAKE_PROFIT_PCT = 0.04  # 4%
+
+# Controle de posição
+posicao_atual = "neutro"  # ou "comprado" / "vendido"
+preco_entrada = 0
 
 def obter_candles():
     klines = client.get_klines(symbol=SYMBOL, interval='1m', limit=100)
