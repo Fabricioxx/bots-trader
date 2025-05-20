@@ -1,3 +1,6 @@
 python-binance
 pandas
 ta
+yfinance
+matplotlib
+streamlit
